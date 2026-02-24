@@ -1,10 +1,375 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Оно тебе надо — аукцион вещей, в которые никто не верил</title>
-  </head>
-  <body></body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оно тебе надо — аукцион вещей, в которые никто не верил</title>
+  <!-- Подключаем базовые стили для наглядности (можно заменить на свой CSS) -->
+  <style>
+    /* Простейшее оформление, чтобы страница выглядела как макет */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #1e1a1a; /* тёмный фон под старину */
+      color: #eae2d7;
+      line-height: 1.5;
+    }
+
+    /* Контейнер для контента */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Шапка */
+    header {
+      background: #2c2622;
+      padding: 20px 0;
+      border-bottom: 3px solid #b89b7b;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #e9d5b5;
+      text-shadow: 2px 2px 0 #5f3e2c;
+    }
+
+    .nav a {
+      color: #e2c7a9;
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 18px;
+      border-bottom: 1px dashed transparent;
+      transition: 0.2s;
+    }
+
+    .nav a:hover {
+      border-bottom-color: #e2c7a9;
+    }
+
+    /* Герой (главный баннер) */
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://via.placeholder.com/1600x600/3d2e23/bfa58b?text=Аукцион+вещей+в+которые+никто+не+верил') center/cover no-repeat;
+      padding: 100px 0;
+      text-align: center;
+      border-bottom: 2px solid #b89b7b;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #f2e3cc;
+      text-shadow: 4px 4px 0 #3b2a1d;
+      max-width: 900px;
+      margin: 0 auto 20px;
+    }
+
+    .hero p {
+      font-size: 28px;
+      font-style: italic;
+      color: #cfb797;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Коллекция лотов */
+    .lots {
+      padding: 60px 0;
+    }
+
+    .section-title {
+      font-size: 42px;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #ebd5b5;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      border-bottom: 1px solid #b89b7b;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+
+    .lots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .lot-card {
+      background: #2d241f;
+      border: 1px solid #7a5e4a;
+      border-radius: 16px;
+      padding: 24px;
+      transition: 0.2s;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    }
+
+    .lot-card:hover {
+      transform: translateY(-6px);
+      border-color: #b28b64;
+      background: #3e3029;
+    }
+
+    .lot-card h3 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #e9cfb2;
+    }
+
+    .lot-year {
+      color: #9f886f;
+      font-family: monospace;
+      font-size: 18px;
+      margin-bottom: 16px;
+      border-left: 3px solid #a77b54;
+      padding-left: 12px;
+    }
+
+    .lot-desc {
+      font-size: 16px;
+      color: #c9bcab;
+      margin-bottom: 24px;
+    }
+
+    .bid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed #5f4c3b;
+      padding-top: 16px;
+    }
+
+    .current-bid {
+      font-weight: bold;
+      color: #e5c28e;
+      font-size: 22px;
+    }
+
+    .bid-btn {
+      background: #86644b;
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      border-bottom: 3px solid #4d3629;
+    }
+
+    .bid-btn:hover {
+      background: #a57b5e;
+      border-bottom-color: #6b4b38;
+    }
+
+    /* О проекте */
+    .about {
+      background: #271f1b;
+      padding: 60px 0;
+      border-top: 2px solid #997b60;
+      border-bottom: 2px solid #997b60;
+    }
+
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-text {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .about-text h2 {
+      font-size: 40px;
+      color: #e9cfb2;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      font-size: 18px;
+      color: #d8cdc0;
+      margin-bottom: 16px;
+    }
+
+    .stats {
+      flex: 1;
+      background: #352b24;
+      padding: 30px;
+      border-radius: 40px 8px 40px 8px;
+      text-align: center;
+      border: 1px solid #b58d6b;
+    }
+
+    .stats div {
+      font-size: 48px;
+      font-weight: 800;
+      color: #e9d3b0;
+    }
+
+    /* Подвал */
+    footer {
+      background: #1f1814;
+      padding: 30px 0;
+      color: #b3a187;
+      text-align: center;
+      border-top: 2px solid #624c3a;
+    }
+
+    .footer-nav {
+      margin: 20px 0;
+    }
+
+    .footer-nav a {
+      color: #c9b197;
+      text-decoration: none;
+      margin: 0 16px;
+      font-size: 16px;
+    }
+
+    .footer-nav a:hover {
+      text-decoration: underline;
+    }
+
+    .copy {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <!-- Шапка сайта -->
+  <header>
+    <div class="container header-inner">
+      <span class="logo">ОНО ТЕБЕ НАДО</span>
+      <nav class="nav">
+        <a href="#">Лоты</a>
+        <a href="#">Аукцион</a>
+        <a href="#">Истории</a>
+        <a href="#">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Основной контент -->
+  <main>
+    <!-- Геройский блок (first view) -->
+    <section class="hero">
+      <div class="container">
+        <h1>ОНО ТЕБЕ НАДО</h1>
+        <p>Аукцион вещей, в которые никто не верил, но они стали легендами</p>
+        <p style="margin-top: 30px; font-size: 20px; color:#dbbc91;">ближайший торг — 12 декабря 19:00</p>
+      </div>
+    </section>
+
+    <!-- Секция с лотами -->
+    <section class="lots">
+      <div class="container">
+        <h2 class="section-title">Актуальные лоты</h2>
+        <div class="lots-grid">
+          <!-- Карточка лота 1 -->
+          <article class="lot-card">
+            <h3>Письмо с того света</h3>
+            <div class="lot-year">1923 / чернила, бумага</div>
+            <p class="lot-desc">Конверт без марки, исписан каллиграфическим почерком. Отправитель неизвестен. Содержание — зашифрованное признание.</p>
+            <div class="bid">
+              <span class="current-bid">₽ 12 000</span>
+              <button class="bid-btn">Торговаться</button>
+            </div>
+          </article>
+          <!-- Карточка лота 2 -->
+          <article class="lot-card">
+            <h3>Стул из фильма «Место встречи»</h3>
+            <div class="lot-year">1979 / дерево, кожа</div>
+            <p class="lot-desc">Оригинальный реквизит, на котором «сидел» Высоцкий. Сохранилась инвентарная бирка Мосфильма.</p>
+            <div class="bid">
+              <span class="current-bid">₽ 47 500</span>
+              <button class="bid-btn">Торговаться</button>
+            </div>
+          </article>
+          <!-- Карточка лота 3 -->
+          <article class="lot-card">
+            <h3>Ржавый ключ от бункера</h3>
+            <div class="lot-year">1944 / сталь, патина</div>
+            <p class="lot-desc">Найден в лесах под Берлином. Немецкая маркировка, возможно от секретного архива. Продаётся с геолокацией.</p>
+            <div class="bid">
+              <span class="current-bid">₽ 8 200</span>
+              <button class="bid-btn">Торговаться</button>
+            </div>
+          </article>
+          <!-- Карточка лота 4 -->
+          <article class="lot-card">
+            <h3>Первое издание «Мастера»</h3>
+            <div class="lot-year">1966 / самиздат</div>
+            <p class="lot-desc">Машинописный экземпляр романа Булгакова, переплетённый вручную. На полях пометки красным карандашом.</p>
+            <div class="bid">
+              <span class="current-bid">₽ 105 000</span>
+              <button class="bid-btn">Торговаться</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Блок "О проекте" -->
+    <section class="about">
+      <div class="container about-content">
+        <div class="about-text">
+          <h2>Вещи, которым никто не верил</h2>
+          <p>«Оно тебе надо» — аукционный дом, где выставляются предметы с сомнительной историей, но бесспорной душой. Каждый лот проходит независимую экспертизу и получает паспорт подлинности.</p>
+          <p>Мы находим артефакты в заброшенных квартирах, на чердаках и в семьях коллекционеров. Если вещь может рассказать историю — она достойна молотка.</p>
+        </div>
+        <div class="stats">
+          <div>127</div>
+          <span>завершённых торгов</span>
+          <div style="font-size: 32px; margin-top: 20px;">> 6 000</div>
+          <span>участников</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Подвал -->
+  <footer>
+    <div class="container">
+      <div class="footer-nav">
+        <a href="#">О нас</a>
+        <a href="#">Правила</a>
+        <a href="#">Оценка лота</a>
+        <a href="#">Доставка</a>
+        <a href="#">Блог</a>
+      </div>
+      <div class="copy">
+        © 2024 Аукцион «Оно тебе надо». Москва, Петровка 38, стр. 2
+      </div>
+    </div>
+  </footer>
+
+  <!-- Для реальной работы можно заменить стили на отдельный файл style.css,
+       а картинки на свои. Сейчас всё встроено для самодостаточности. -->
+</body>
 </html>
